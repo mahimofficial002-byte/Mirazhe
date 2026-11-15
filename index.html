@@ -3,7 +3,6 @@
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400;0,6..96,600;1,6..96,400&family=Jost:wght@300;400;500&display=swap">
 <style>
-/* Layout: sticky slim header, asymmetric hero (type left, jewel orb right), shop grid with filter, story band, footer */
 :root{
   --bg:#f3eff4; --surface:#e9e2ec; --fg:#2a1630; --muted:#6d5a76; --line:#d6cbdb;
   --accent:#a8566b; --accent-fg:#fff8f9; --gold:#b98a4e; --deep:#3b1d47;
@@ -149,23 +148,12 @@ footer .logo{color:var(--fg)}
     </svg>
   </section>
 
-  <section class="split" aria-label="Collections">
-    <a class="tile j" href="#shop" data-go="Jewellery"><p class="eyebrow">Collection</p><h2>Jewellery</h2><p>Rings, earrings and necklaces with a soft gold finish.</p>
-      <svg viewBox="0 0 200 200" aria-hidden="true"><circle cx="100" cy="110" r="52" fill="none" stroke="#d6ab72" stroke-width="10"/><circle cx="100" cy="46" r="16" fill="#f4e6ee"/></svg></a>
-    <a class="tile c" href="#shop" data-go="Cosmetics"><p class="eyebrow">Collection</p><h2>Cosmetics</h2><p>Lip, face and skin care in shades made for deshi skin tones.</p>
-      <svg viewBox="0 0 200 200" aria-hidden="true"><rect x="80" y="70" width="40" height="100" rx="4" fill="#3b1d47"/><rect x="84" y="20" width="32" height="56" rx="6" fill="#fff8f9" opacity=".85"/></svg></a>
-  </section>
-
   <section class="shop" id="shop">
     <div class="shop-head">
       <div><p class="eyebrow">The edit</p><h2>Everyday pieces</h2></div>
-      <div class="filters" role="group" aria-label="Filter products">
-        <button class="chip" data-f="All" aria-pressed="true">All</button>
-        <button class="chip" data-f="Jewellery" aria-pressed="false">Jewellery</button>
-        <button class="chip" data-f="Cosmetics" aria-pressed="false">Cosmetics</button>
-      </div>
     </div>
-    <div class="grid" id="grid"></div>
+    <!-- Google Sheet Dynamic Products Grid -->
+    <div class="grid" id="product-list"></div>
   </section>
 </main>
 
@@ -177,21 +165,7 @@ footer .logo{color:var(--fg)}
     </div>
     <div>
       <p>The name Mirazhé comes from two ideas we love: <i>mira</i>, to look, and <i>zhé</i>, a soft sound that sounds like shimmer. Together they mean something you look at twice.</p>
-      <p>We keep our range small on purpose. Each piece of jewellery is tested for tarnish and skin reaction, and each cosmetic is tested on a range of skin tones before it ships.</p>
-      <div class="vals">
-        <div><h3>Skin-safe metals</h3><p>Nickel-free, hypoallergenic findings on every piece.</p></div>
-        <div><h3>Shades for deshi skin</h3><p>Lip and base colours built around warm and olive undertones.</p></div>
-        <div><h3>Small batches</h3><p>Limited runs, so what you get is fresh and carefully finished.</p></div>
-      </div>
     </div>
-  </div>
-</section>
-
-<section class="wrap news" id="join">
-  <div><p class="eyebrow">Stay close</p><h2>Be first to hear about new drops.</h2></div>
-  <div>
-    <form class="sub" id="sub"><input id="email" type="email" required placeholder="Your email address" aria-label="Email address"><button class="btn solid" type="submit">Join</button></form>
-    <p class="note" id="subnote" aria-live="polite"></p>
   </div>
 </section>
 
@@ -207,114 +181,51 @@ footer .logo{color:var(--fg)}
     <header><h2>Your bag</h2><button class="btn icon-btn" id="closeCart">Close</button></header>
     <div class="items" id="items"></div>
     <div class="total"><span>Total</span><span id="total">৳0</span></div>
-    <button class="btn solid" id="checkout">Place order</button>
-    <p class="note" id="cnote" aria-live="polite">Sample products and prices. Online checkout is not connected yet.</p>
+    <button class="btn solid" id="checkout">Place order on WhatsApp</button>
   </aside>
 </div>
 
 <script>
-var P=[
- {id:1,n:'Lune Ring',c:'Jewellery',t:'ring',p:1450,d:'Slim gold band, adjustable',h:'#b98a4e'},
- {id:2,n:'Pearl Drop Earrings',c:'Jewellery',t:'earring',p:1890,d:'Freshwater-look pearl',h:'#b98a4e'},
- {id:3,n:'Halo Necklace',c:'Jewellery',t:'necklace',p:2350,d:'Fine chain, 16 inch',h:'#b98a4e'},
- {id:4,n:'Rose Hour Lipstick',c:'Cosmetics',t:'lip',p:950,d:'Satin finish, warm rose',h:'#a8566b'},
- {id:5,n:'Dusk Cheek Tint',c:'Cosmetics',t:'compact',p:1100,d:'Blendable cream blush',h:'#c46f6a'},
- {id:6,n:'Glow Serum 30ml',c:'Cosmetics',t:'serum',p:1650,d:'Vitamin C and niacinamide',h:'#d6ab72'},
- {id:7,n:'Mira Cuff Bracelet',c:'Jewellery',t:'cuff',p:1990,d:'Open cuff, brushed gold',h:'#b98a4e'},
- {id:8,n:'Velvet Kajal',c:'Cosmetics',t:'kajal',p:550,d:'Smudge-proof, deep black',h:'#3b1d47'}
-];
-function art(t,h,k){
-  var g='<defs><linearGradient id="g'+k+'" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#f1d59b"/><stop offset=".55" stop-color="'+h+'"/><stop offset="1" stop-color="#6e4d25"/></linearGradient><radialGradient id="p'+k+'" cx="35%" cy="30%" r="75%"><stop offset="0" stop-color="#fff"/><stop offset=".6" stop-color="#eadbe6"/><stop offset="1" stop-color="#b9a0b8"/></radialGradient></defs>';
-  var G='url(#g'+k+')',Pl='url(#p'+k+')',s='';
-  if(t=='ring')s='<circle cx="100" cy="120" r="46" fill="none" stroke="'+G+'" stroke-width="12"/><path d="M100 72l16-24h-32z" fill="'+Pl+'"/><circle cx="100" cy="44" r="14" fill="'+Pl+'"/>';
-  if(t=='earring')s='<g><circle cx="70" cy="50" r="6" fill="'+G+'"/><path d="M70 56v40" stroke="'+G+'" stroke-width="3"/><circle cx="70" cy="116" r="20" fill="'+Pl+'"/><circle cx="130" cy="50" r="6" fill="'+G+'"/><path d="M130 56v40" stroke="'+G+'" stroke-width="3"/><circle cx="130" cy="116" r="20" fill="'+Pl+'"/></g>';
-  if(t=='necklace')s='<path d="M30 40C40 150 160 150 170 40" fill="none" stroke="'+G+'" stroke-width="4"/><circle cx="100" cy="128" r="16" fill="'+Pl+'"/><circle cx="100" cy="128" r="22" fill="none" stroke="'+G+'" stroke-width="4"/>';
-  if(t=='lip')s='<rect x="78" y="100" width="44" height="76" rx="3" fill="'+G+'"/><rect x="82" y="50" width="36" height="56" rx="4" fill="'+h+'"/><path d="M82 56l36-14v14z" fill="#f2d1da" opacity=".5"/>';
-  if(t=='compact')s='<circle cx="100" cy="110" r="58" fill="'+G+'"/><circle cx="100" cy="110" r="44" fill="'+h+'"/><circle cx="86" cy="96" r="10" fill="#fff" opacity=".25"/>';
-  if(t=='serum')s='<rect x="72" y="86" width="56" height="86" rx="8" fill="'+h+'" opacity=".9"/><rect x="88" y="52" width="24" height="38" rx="3" fill="'+G+'"/><path d="M100 24c-8 12-8 20 0 22 8-2 8-10 0-22z" fill="'+h+'"/><rect x="80" y="110" width="40" height="30" rx="2" fill="#fff" opacity=".35"/>';
-  if(t=='cuff')s='<path d="M44 80c20-24 92-24 112 0v30c-20 24-92 24-112 0z" fill="none" stroke="'+G+'" stroke-width="14" stroke-linecap="round" stroke-dasharray="230 40"/><circle cx="100" cy="64" r="8" fill="'+Pl+'"/>';
-  if(t=='kajal')s='<rect x="86" y="50" width="28" height="120" rx="14" fill="'+h+'"/><rect x="86" y="50" width="28" height="34" rx="14" fill="'+G+'"/><rect x="92" y="94" width="5" height="60" fill="#fff" opacity=".18"/>';
-  return '<svg viewBox="0 0 200 200" aria-hidden="true">'+g+s+'</svg>';
-}
-function tk(n){return '৳'+n.toLocaleString('en-US')}
-var cart={},filter='All',$=function(i){return document.getElementById(i)};
-function renderGrid(){
-  $('grid').innerHTML=P.filter(function(x){return filter=='All'||x.c==filter}).map(function(x){
-    return '<article class="card"><div class="art">'+art(x.t,x.h,'c'+x.id)+'</div><h3>'+x.n+'</h3><div class="meta"><span>'+x.d+'</span><span class="price">'+tk(x.p)+'</span></div><button class="btn" data-add="'+x.id+'">Add to bag</button></article>';
-  }).join('');
-}
-function renderCart(){
-  var ids=Object.keys(cart),sum=0,n=0;
-  $('items').innerHTML=ids.length?ids.map(function(i){
-    var x=P.filter(function(y){return y.id==i})[0],q=cart[i];sum+=x.p*q;n+=q;
-    return '<div class="line"><div class="art">'+art(x.t,x.h,'l'+x.id)+'</div><div><h3 style="font-size:1.05rem">'+x.n+'</h3><div class="qty"><button data-dec="'+i+'" aria-label="Less">−</button><span>'+q+'</span><button data-inc="'+i+'" aria-label="More">+</button></div></div><span class="price">'+tk(x.p*q)+'</span></div>';
-  }).join(''):'<p class="empty">Your bag is empty.</p>';
-  $('total').textContent=tk(sum);$('count').textContent=n;
-}
-function setCart(o){$('layer').hidden=!o;if(o)$('closeCart').focus()}
-document.addEventListener('click',function(e){
-  var t=e.target.closest('[data-add],[data-inc],[data-dec],[data-f],[data-go]');
-  if(t){
-    if(t.dataset.add||t.dataset.inc){var i=t.dataset.add||t.dataset.inc;cart[i]=(cart[i]||0)+1;renderCart();if(t.dataset.add){t.textContent='Added';setTimeout(function(){t.textContent='Add to bag'},900)}}
-    if(t.dataset.dec){var d=t.dataset.dec;cart[d]--;if(cart[d]<1)delete cart[d];renderCart()}
-    if(t.dataset.f||t.dataset.go){filter=t.dataset.f||t.dataset.go;document.querySelectorAll('.chip').forEach(function(c){c.setAttribute('aria-pressed',c.dataset.f==filter)});renderGrid()}
-  }
-});
-$('openCart').onclick=function(){setCart(true)};
-$('closeCart').onclick=$('scrim').onclick=function(){setCart(false)};
-document.addEventListener('keydown',function(e){if(e.key=='Escape')setCart(false)});
-$('checkout').onclick=function(){$('cnote').textContent=Object.keys(cart).length?'Thanks. Online ordering is not live yet, so this sample bag has not been sent anywhere.':'Add something to your bag first.'};
-$('sub').onsubmit=function(e){e.preventDefault();$('subnote').textContent='Thank you. This sample form does not store emails yet.';$('email').value=''};
-renderGrid();renderCart();
-</script> <script>
-  const apiURL = 'https://script.google.com/macros/s/AKfycbyypSYH_rJ-uJXlVaCgEeyVSeRnhwSOvt8nVsZ_0XTuvlHYeBeHFNVnRXHrHczbN0cG/exec';
+var cart={}, filter='All';
 
-  fetch(apiURL)
-    .then(response => response.json())
-    .then(products => {
-      let html = '';
-      products.forEach(item => {
-        html += `
-          <div class="product-card" style="border: 1px solid #ddd; padding: 15px; margin: 10px; display: inline-block; width: 220px;">
-            <img src="${item.image}" alt="${item.name}" style="width: 100%; height: 180px; object-fit: cover;">
-            <h3>${item.name}</h3>
-            <p>${item.description}</p>
-            <p><strong>দাম: ${item.price} টাকা</strong></p>
-            <a href="https://wa.me/8801577752625?text=আমি ${encodeURIComponent(item.name)} প্রোডাক্টটি অর্ডার করতে চাই" target="_blank" style="background: green; color: white; padding: 8px 12px; text-decoration: none; display: inline-block;">Order on WhatsApp</a>
+// Google Sheet API থেকে ডেটা এনে ওয়েবসাইটে শো করানোর কোড
+const apiURL = 'https://script.google.com/macros/s/AKfycbypPSYH_rJ-uJXLvaCgEeyVSeRnhwSOvt8nVsZ_0XTuvlHYeBeHFNVnRXHrHczbN0cG/exec';
+
+fetch(apiURL)
+  .then(response => response.json())
+  .then(products => {
+    let html = '';
+    products.forEach(item => {
+      html += `
+        <article class="card">
+          <div class="art">
+            <img src="${item.image}" alt="${item.name}" style="width: 100%; height: 100%; object-fit: cover;">
           </div>
-        `;
-      });
-      // আপনার সাইটে প্রোডাক্ট দেখানোর নির্দিষ্ট কোনো ID থাকলে এখানে বসাতে পারেন, যেমন product-list
-      if(document.getElementById('product-list')) {
-        document.getElementById('product-list').innerHTML = html;
-      }
+          <h3>${item.name}</h3>
+          <div class="meta">
+            <span>${item.description}</span>
+            <span class="price">৳${item.price}</span>
+          </div>
+          <a href="https://wa.me/8801577752625?text=আমি ${encodeURIComponent(item.name)} প্রোডাক্টটি অর্ডার করতে চাই" target="_blank" class="btn" style="text-align: center; text-decoration: none; display: block;">Order on WhatsApp</a>
+        </article>
+      `;
     });
-<div id="product-list"></div>
+    
+    if(document.getElementById('product-list')) {
+      document.getElementById('product-list').innerHTML = html;
+    }
+  });
 
-  <script>
-    const apiURL = 'https://script.google.com/macros/s/AKfycbypPSYH_rJ-uJXLvaCgEeyVSeRnhwSOvt8nVsZ_0XTuvlHYeBeHFNVnRXHrHczbN0cG/exec';
+function setCart(o){ document.getElementById('layer').hidden = !o; if(o) document.getElementById('closeCart').focus(); }
+document.getElementById('openCart').onclick = function(){ setCart(true); };
+document.getElementById('closeCart').onclick = document.getElementById('scrim').onclick = function(){ setCart(false); };
+document.addEventListener('keydown', function(e){ if(e.key=='Escape') setCart(false); });
 
-    fetch(apiURL)
-      .then(response => response.json())
-      .then(products => {
-        let html = '';
-        products.forEach(item => {
-          html += `
-            <div class="product-card" style="border: 1px solid #ddd; padding: 15px; margin: 10px; display: inline-block; width: 220px;">
-              <img src="${item.image}" alt="${item.name}" style="width: 100%; height: 180px; object-fit: cover;">
-              <h3>${item.name}</h3>
-              <p>${item.description}</p>
-              <p><strong>দাম: ${item.price} টাকা</strong></p>
-              <a href="https://wa.me/8801577752625?text=আমি ${encodeURIComponent(item.name)} প্রোডাক্টটি অর্ডার করতে চাই" target="_blank" style="background: green; color: white; padding: 8px 12px; text-decoration: none; display: inline-block;">Order on WhatsApp</a>
-            </div>
-          `;
-        });
-        
-        if(document.getElementById('product-list')) {
-          document.getElementById('product-list').innerHTML = html;
-        }
-      });
-    </script>
-    <div id="product-list"></div>
-    </body>
-    </html>
+// WhatsApp Direct Checkout for Bag
+document.getElementById('checkout').onclick = function(){
+  const waUrl = `https://wa.me/8801577752625?text=${encodeURIComponent('আসসালামু আলাইকুম! আমি Mirazhé থেকে অর্ডার করতে চাই।')}`;
+  window.open(waUrl, '_blank');
+};
+</script>
+</body>
+</html>

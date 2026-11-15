@@ -266,6 +266,33 @@ document.addEventListener('keydown',function(e){if(e.key=='Escape')setCart(false
 $('checkout').onclick=function(){$('cnote').textContent=Object.keys(cart).length?'Thanks. Online ordering is not live yet, so this sample bag has not been sent anywhere.':'Add something to your bag first.'};
 $('sub').onsubmit=function(e){e.preventDefault();$('subnote').textContent='Thank you. This sample form does not store emails yet.';$('email').value=''};
 renderGrid();renderCart();
-</script>
+</script> <script>
+  const apiURL = 'https://script.google.com/macros/s/AKfycbyypSYH_rJ-uJXlVaCgEeyVSeRnhwSOvt8nVsZ_0XTuvlHYeBeHFNVnRXHrHczbN0cG/exec';
 
-</body></html>
+  fetch(apiURL)
+    .then(response => response.json())
+    .then(products => {
+      let html = '';
+      products.forEach(item => {
+        html += `
+          <div class="product-card" style="border: 1px solid #ddd; padding: 15px; margin: 10px; display: inline-block; width: 220px;">
+            <img src="${item.image}" alt="${item.name}" style="width: 100%; height: 180px; object-fit: cover;">
+            <h3>${item.name}</h3>
+            <p>${item.description}</p>
+            <p><strong>দাম: ${item.price} টাকা</strong></p>
+            <a href="https://wa.me/8801577752625?text=আমি ${encodeURIComponent(item.name)} প্রোডাক্টটি অর্ডার করতে চাই" target="_blank" style="background: green; color: white; padding: 8px 12px; text-decoration: none; display: inline-block;">Order on WhatsApp</a>
+          </div>
+        `;
+      });
+      // আপনার সাইটে প্রোডাক্ট দেখানোর নির্দিষ্ট কোনো ID থাকলে এখানে বসাতে পারেন, যেমন product-list
+      if(document.getElementById('product-list')) {
+        document.getElementById('product-list').innerHTML = html;
+      }
+    });
+if(document.getElementById('product-list')) {
+      document.getElementById('product-list').innerHTML = html;
+    }
+  });
+</script>
+</body>
+</html>

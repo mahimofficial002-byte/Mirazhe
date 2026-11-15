@@ -46,10 +46,6 @@ nav a{text-decoration:none;color:var(--muted)} nav a:hover{color:var(--fg)}
 .hero h1 em{color:var(--accent)}
 .hero p.lead{max-width:44ch;margin:24px 0 32px;color:var(--muted);font-size:1.05rem}
 .hero .cta{display:flex;gap:12px;flex-wrap:wrap}
-.orb{aspect-ratio:1;max-width:100%;width:100%;min-width:0}
-.facts{display:flex;gap:28px;flex-wrap:wrap;margin-top:40px;font-size:.8rem;color:var(--muted)}
-.facts b{display:block;font-family:var(--font-display);font-weight:400;color:var(--fg);font-size:1.3rem}
-@media(max-width:820px){.hero{grid-template-columns:1fr;padding-top:36px}.orb{max-width:380px;margin:0 auto}}
 
 .shop{padding:24px 0 80px}
 .shop-head{display:flex;justify-content:space-between;align-items:end;gap:20px;flex-wrap:wrap;margin-bottom:28px}
@@ -61,7 +57,7 @@ nav a{text-decoration:none;color:var(--muted)} nav a:hover{color:var(--fg)}
 .card h3{font-size:1.25rem}
 .card .meta{display:flex;justify-content:space-between;gap:10px;font-size:.84rem;color:var(--muted)}
 .price{color:var(--fg);font-weight:400;font-variant-numeric:tabular-nums}
-.card .btn{width:100%;margin-top:4px;text-align:center;text-decoration:none;display:block;}
+.card .btn{width:100%;margin-top:4px;text-align:center}
 
 .story{background:var(--surface);margin:0 calc(-1 * max(16px,env(safe-area-inset-left,0px)));padding:80px max(16px,env(safe-area-inset-left,0px))}
 .story .wrap{display:grid;grid-template-columns:1fr 1.2fr;gap:56px}
@@ -80,6 +76,9 @@ footer .logo{color:var(--fg)}
 .drawer h2{font-size:1.7rem}
 .items{flex:1;overflow:auto;display:grid;align-content:start;gap:14px;padding:6px 0}
 .line{display:grid;grid-template-columns:56px 1fr auto;gap:12px;align-items:center;border-bottom:1px solid var(--line);padding-bottom:12px}
+.line .art{aspect-ratio:1;width:56px}
+.qty{display:flex;align-items:center;gap:8px;font-size:.85rem;margin-top:4px}
+.qty button{width:26px;height:26px;border:1px solid var(--line);background:transparent;color:var(--fg);cursor:pointer;font:inherit}
 .total{display:flex;justify-content:space-between;font-family:var(--font-display);font-size:1.4rem;padding:14px 0 8px}
 .empty{color:var(--muted);padding:20px 0}
 </style>
@@ -108,7 +107,6 @@ footer .logo{color:var(--fg)}
     <div class="shop-head">
       <div><p class="eyebrow">The edit</p><h2>Everyday pieces</h2></div>
     </div>
-    <!-- Static Products Grid -->
     <div class="grid" id="product-list"></div>
   </section>
 </main>
@@ -130,57 +128,7 @@ footer .logo{color:var(--fg)}
 </div>
 
 <script>
-// এখানে আপনি আপনার ইচ্ছামমতো প্রোডাক্ট বাড়াতে বা কমাতে পারবেন (ছবি, নাম, বিবরণ ও দামসহ)
+// এখানে প্রোডাক্টগুলোর তথ্য, দাম ও ছবির লিংক দেওয়া আছে। আপনি চাইলে ছবির লিংক পরিবর্তন করতে পারবেন।
 const products = [
-  {
-    name: 'Lune Ring',
-    description: 'Slim gold band, adjustable',
-    price: 1450,
-    image: 'https://i.ibb.co.com/1G6Z048/IMG-20250516-160533.jpg'
-  },
-  {
-    name: 'Pearl Drop Earrings',
-    description: 'Freshwater-look pearl',
-    price: 1890,
-    image: 'https://i.ibb.co.com/1G6Z048/IMG-20250516-160533.jpg'
-  },
-  {
-    name: 'Halo Necklace',
-    description: 'Fine chain, 16 inch',
-    price: 2350,
-    image: 'https://i.ibb.co.com/1G6Z048/IMG-20250516-160533.jpg'
-  },
-  {
-    name: 'Rose Hour Lipstick',
-    description: 'Satin finish, warm rose',
-    price: 950,
-    image: 'https://i.ibb.co.com/1G6Z048/IMG-20250516-160533.jpg'
-  }
-];
-
-let cart = {};
-
-function renderProducts() {
-  let html = '';
-  products.forEach((item, index) => {
-    html += `
-      <article class="card">
-        <div class="art">
-          <img src="${item.image}" alt="${item.name}">
-        </div>
-        <h3>${item.name}</h3>
-        <div class="meta">
-          <span>${item.description}</span>
-          <span class="price">৳${item.price}</span>
-        </div>
-        <a href="https://wa.me/8801577752625?text=আমি ${encodeURIComponent(item.name)} (${item.price} টাকা) প্রোডাক্টটি অর্ডার করতে চাই" target="_blank" class="btn solid">Order on WhatsApp</a>
-      </article>
-    `;
-  });
-  document.getElementById('product-list').innerHTML = html;
-}
-
-renderProducts();
-</script>
-</body>
-</html>
+  { id: 1, name: 'Lune Ring', description: 'Slim gold band, adjustable', price: 1450, image: 'https://https://i.postimg.cc/RZ0R1KVG/IMG-20250516-WA0043-500x500.webp' },
+  { id: 2, name: 'Pearl Drop Earrings', description: 'Freshwater-look pearl', price: 1890, image: 'https://i.ibb.co.com/1G6Z048/IMG-20250516-160533.jpg' },

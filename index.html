@@ -68,41 +68,42 @@ nav a{text-decoration:none;color:var(--muted)} nav a:hover{color:var(--fg)}
 footer{border-top:1px solid var(--line);padding:36px 0 48px;display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap;font-size:.84rem;color:var(--muted)}
 footer .logo{color:var(--fg)}
 
-/* cart drawer & customer checkout form */
+/* cart drawer & checkout */
 .scrim{position:fixed;inset:0;background:rgba(20,8,26,.5);z-index:70}
 .drawer{position:fixed;top:0;right:0;bottom:0;width:min(440px,100%);background:var(--bg);z-index:80;display:flex;flex-direction:column;
-  padding:calc(16px + env(safe-area-inset-top,0px)) max(18px,env(safe-area-inset-right,0px)) calc(18px + env(safe-area-inset-bottom,0px)) 18px;border-left:1px solid var(--line)}
-.drawer header{position:static;border:0;display:flex;justify-content:space-between;align-items:center;padding-bottom:10px;border-bottom:1px solid var(--line)}
+  padding:20px;border-left:1px solid var(--line)}
+.drawer header{display:flex;justify-content:space-between;align-items:center;padding-bottom:12px;border-bottom:1px solid var(--line)}
 .drawer h2{font-size:1.5rem}
-.drawer-body{flex:1;overflow-y:auto;padding-right:4px;display:flex;flex-direction:column;gap:14px}
-.items{display:grid;align-content:start;gap:12px;padding:8px 0}
-.line{display:grid;grid-template-columns:52px 1fr auto;gap:12px;align-items:center;border-bottom:1px solid var(--line);padding-bottom:10px}
-.line .art{aspect-ratio:1;width:52px}
+.drawer-body{flex:1;overflow-y:auto;padding:12px 0;display:flex;flex-direction:column;gap:16px}
+
+.items{display:grid;gap:10px}
+.line{display:grid;grid-template-columns:50px 1fr auto;gap:10px;align-items:center;border-bottom:1px solid var(--line);padding-bottom:10px}
+.line .art{aspect-ratio:1;width:50px}
 .qty{display:flex;align-items:center;gap:8px;font-size:.85rem;margin-top:4px}
-.qty button{width:24px;height:24px;border:1px solid var(--line);background:transparent;color:var(--fg);cursor:pointer;font:inherit;display:grid;place-items:center}
+.qty button{width:24px;height:24px;border:1px solid var(--line);background:transparent;color:var(--fg);cursor:pointer}
 
-/* customer details form inside drawer */
-.cust-form{background:var(--surface);padding:14px;border:1px solid var(--line);display:flex;flex-direction:column;gap:10px}
-.cust-form h3{font-size:1.15rem;margin-bottom:2px}
-.field{display:flex;flex-direction:column;gap:4px}
-.field label{font-size:.75rem;text-transform:uppercase;letter-spacing:.12em;color:var(--muted)}
+/* customer form styling */
+.cust-box{background:var(--surface);padding:14px;border:1px solid var(--line);display:flex;flex-direction:column;gap:10px}
+.cust-box h3{font-size:1.05rem}
+.field{display:flex;flex-direction:column;gap:3px}
+.field label{font-size:.72rem;text-transform:uppercase;letter-spacing:.1em;color:var(--muted)}
 .field input, .field textarea, .field select{
-  width:100%;padding:9px 11px;border:1px solid var(--line);background:var(--bg);color:var(--fg);font:inherit;font-size:.92rem;border-radius:0
+  width:100%;padding:9px;border:1px solid var(--line);background:var(--bg);color:var(--fg);font:inherit;font-size:.9rem
 }
-.field textarea{resize:vertical;min-height:60px}
+.field textarea{resize:vertical;min-height:55px}
 
-.summary-box{border-top:1px solid var(--line);padding-top:10px;display:flex;flex-direction:column;gap:4px}
+.summary{border-top:1px solid var(--line);padding-top:10px;display:flex;flex-direction:column;gap:4px}
 .sub-row{display:flex;justify-content:space-between;font-size:.9rem;color:var(--muted)}
-.total{display:flex;justify-content:space-between;font-family:var(--font-display);font-size:1.35rem;padding-top:4px}
-.empty{color:var(--muted);padding:20px 0}
+.total{display:flex;justify-content:space-between;font-family:var(--font-display);font-size:1.3rem;padding-top:4px}
+.empty{color:var(--muted);padding:15px 0;text-align:center}
 </style>
 
 <header>
   <div class="wrap bar">
-    <a class="logo" href="#top" aria-label="Mirazhé">Mira<i>zhé</i></a>
-    <nav aria-label="Main"><a href="#shop">Shop</a><a href="#story">Our story</a></nav>
+    <a class="logo" href="#top">Mira<i>zhé</i></a>
+    <nav><a href="#shop">Shop</a><a href="#story">Our story</a></nav>
     <div class="tools">
-      <button class="btn icon-btn" id="openCart" aria-label="Open bag">Bag <span id="count">0</span></button>
+      <button class="btn icon-btn" id="openCart">Bag <span id="count">0</span></button>
     </div>
   </div>
 </header>
@@ -125,19 +126,6 @@ footer .logo{color:var(--fg)}
   </section>
 </main>
 
-<section class="story" id="story">
-  <div class="wrap">
-    <div>
-      <p class="eyebrow">Our story</p>
-      <h2>Made to be worn every day, not saved for later.</h2>
-    </div>
-    <div>
-      <p>The name Mirazhé comes from two ideas we love: <i>mira</i>, to look, and <i>zhé</i>, a soft sound that sounds like shimmer. Together they mean something you look at twice.</p>
-      <p>We keep our range small on purpose. Each piece of jewellery is tested for tarnish and skin reaction, and each cosmetic is tested on a range of skin tones before it ships.</p>
-    </div>
-  </div>
-</section>
-
 <footer class="wrap">
   <a class="logo" href="#top">Mira<i>zhé</i></a>
   <p>Jewellery &amp; Cosmetics · Dhaka, Bangladesh</p>
@@ -146,75 +134,54 @@ footer .logo{color:var(--fg)}
 
 <div id="layer" hidden>
   <div class="scrim" id="scrim"></div>
-  <aside class="drawer" role="dialog" aria-label="Your bag">
-    <header><h2>Your bag &amp; Checkout</h2><button class="btn icon-btn" id="closeCart">Close</button></header>
+  <aside class="drawer">
+    <header><h2>Your Bag &amp; Checkout</h2><button class="btn icon-btn" id="closeCart">Close</button></header>
     
     <div class="drawer-body">
+      <!-- Products List inside Bag -->
       <div class="items" id="items"></div>
 
-      <!-- Customer Details Form -->
-      <div class="cust-form" id="custFormBox">
-        <h3>Delivery Details</h3>
+      <!-- Customer Details Form (Always visible when bag is open) -->
+      <div class="cust-box" id="custBox">
+        <h3>Delivery Information</h3>
         <div class="field">
-          <label for="cName">Full Name *</label>
-          <input type="text" id="cName" placeholder="আপনার পূর্ণ নাম লিখুন" required>
+          <label>Full Name *</label>
+          <input type="text" id="cName" placeholder="আপনার পূর্ণ নাম">
         </div>
         <div class="field">
-          <label for="cPhone">Phone Number *</label>
-          <input type="tel" id="cPhone" placeholder="01XXXXXXXXX" required>
+          <label>Phone Number *</label>
+          <input type="tel" id="cPhone" placeholder="01XXXXXXXXX">
         </div>
         <div class="field">
-          <label for="cZone">Delivery Area *</label>
-          <select id="cZone">
+          <label>Delivery Area *</label>
+          <select id="cZone" onchange="renderCart()">
             <option value="70">Inside Dhaka (৳70)</option>
             <option value="130">Outside Dhaka (৳130)</option>
           </select>
         </div>
         <div class="field">
-          <label for="cAddress">Full Address *</label>
-          <textarea id="cAddress" placeholder="বাসা নং, রোড নং, এলাকা, থানা ও জেলার নাম লিখুন" required></textarea>
-        </div>
-        <div class="field">
-          <label for="cNote">Order Note (Optional)</label>
-          <input type="text" id="cNote" placeholder="বিশেষ কোনো নির্দেশনা থাকলে লিখুন">
+          <label>Full Address *</label>
+          <textarea id="cAddress" placeholder="বাসা, রোড, এলাকা, থানা ও জেলা"></textarea>
         </div>
       </div>
 
-      <div class="summary-box">
-        <div class="sub-row"><span>Products Subtotal</span><span id="subTotal">৳0</span></div>
+      <!-- Bill Summary -->
+      <div class="summary">
+        <div class="sub-row"><span>Products Total</span><span id="subTotal">৳0</span></div>
         <div class="sub-row"><span>Delivery Charge</span><span id="delCharge">৳70</span></div>
         <div class="total"><span>Grand Total</span><span id="total">৳0</span></div>
       </div>
     </div>
 
-    <button class="btn solid" id="checkout" style="margin-top:10px">Place order on WhatsApp</button>
+    <button class="btn solid" id="checkout" style="width:100%;margin-top:10px">Place order on WhatsApp</button>
   </aside>
 </div>
 
 <script>
-// এখানে আপনার প্রোডাক্টগুলো দেওয়া আছে। চাইলে নতুন প্রোডাক্ট ও ছবির লিংক বসাতে পারবেন।
 const products = [
-  { 
-    id: 1, 
-    name: 'Lune Ring', 
-    description: 'Slim gold band, adjustable', 
-    price: 1450, 
-    image: 'https://i.postimg.cc/RZ0R1KVG/IMG-20250516-WA0043-500x500.webp' 
-  },
-  { 
-    id: 2, 
-    name: 'Pearl Drop Earrings', 
-    description: 'Freshwater-look pearl', 
-    price: 1890, 
-    image: 'https://i.postimg.cc/RZ0R1KVG/IMG-20250516-WA0043-500x500.webp' 
-  },
-  { 
-    id: 3, 
-    name: 'Halo Necklace', 
-    description: 'Fine chain, 16 inch', 
-    price: 2350, 
-    image: 'https://i.postimg.cc/RZ0R1KVG/IMG-20250516-WA0043-500x500.webp' 
-  }
+  { id: 1, name: 'Lune Ring', description: 'Slim gold band, adjustable', price: 1450, image: 'https://i.postimg.cc/RZ0R1KVG/IMG-20250516-WA0043-500x500.webp' },
+  { id: 2, name: 'Pearl Drop Earrings', description: 'Freshwater-look pearl', price: 1890, image: 'https://i.postimg.cc/RZ0R1KVG/IMG-20250516-WA0043-500x500.webp' },
+  { id: 3, name: 'Halo Necklace', description: 'Fine chain, 16 inch', price: 2350, image: 'https://i.postimg.cc/RZ0R1KVG/IMG-20250516-WA0043-500x500.webp' }
 ];
 
 let cart = {};
@@ -224,9 +191,7 @@ function renderProducts() {
   products.forEach(item => {
     html += `
       <article class="card">
-        <div class="art">
-          <img src="${item.image}" alt="${item.name}">
-        </div>
+        <div class="art"><img src="${item.image}" alt="${item.name}"></div>
         <h3>${item.name}</h3>
         <div class="meta">
           <span>${item.description}</span>
@@ -241,17 +206,17 @@ function renderProducts() {
 
 function renderCart() {
   let ids = Object.keys(cart), sum = 0, n = 0;
-  let delivery = ids.length ? parseInt(document.getElementById('cZone').value) : 0;
+  let delivery = parseInt(document.getElementById('cZone').value) || 70;
 
-  document.getElementById('items').innerHTML = ids.length ? ids.map(function(i){
+  document.getElementById('items').innerHTML = ids.length ? ids.map(i => {
     let x = products.find(y => y.id == i), q = cart[i];
     sum += x.price * q; n += q;
     return `
       <div class="line">
         <div class="art"><img src="${x.image}" style="width:100%;height:100%;object-fit:cover"></div>
         <div>
-          <h3 style="font-size:1rem">${x.name}</h3>
-          <div style="font-size:.8rem;color:var(--muted)">৳${x.price} × ${q}</div>
+          <h3 style="font-size:0.95rem">${x.name}</h3>
+          <div style="font-size:0.8rem;color:var(--muted)">৳${x.price} × ${q}</div>
           <div class="qty">
             <button data-dec="${i}">−</button>
             <span>${q}</span>
@@ -261,18 +226,15 @@ function renderCart() {
         <span class="price">৳${x.price * q}</span>
       </div>
     `;
-  }).join('') : '<p class="empty">Your bag is empty. Add products to order.</p>';
+  }).join('') : '<p class="empty">Your bag is empty.</p>';
 
-  document.getElementById('custFormBox').style.display = ids.length ? 'flex' : 'none';
   document.getElementById('subTotal').textContent = '৳' + sum;
   document.getElementById('delCharge').textContent = '৳' + delivery;
   document.getElementById('total').textContent = '৳' + (sum + delivery);
   document.getElementById('count').textContent = n;
 }
 
-document.getElementById('cZone').addEventListener('change', renderCart);
-
-document.addEventListener('click', function(e){
+document.addEventListener('click', e => {
   let t = e.target.closest('[data-add],[data-inc],[data-dec]');
   if(t){
     if(t.dataset.add){ let id = t.dataset.add; cart[id] = (cart[id] || 0) + 1; renderCart(); setCart(true); }
@@ -281,27 +243,25 @@ document.addEventListener('click', function(e){
   }
 });
 
-function setCart(o){ document.getElementById('layer').hidden = !o; }
-document.getElementById('openCart').onclick = function(){ setCart(true); };
-document.getElementById('closeCart').onclick = document.getElementById('scrim').onclick = function(){ setCart(false); };
-document.addEventListener('keydown', function(e){ if(e.key=='Escape') setCart(false); });
+function setCart(o){ document.getElementById('layer').hidden = !o; renderCart(); }
+document.getElementById('openCart').onclick = () => setCart(true);
+document.getElementById('closeCart').onclick = document.getElementById('scrim').onclick = () => setCart(false);
 
-// WhatsApp Checkout with Customer Details, Products, Quantities & Address
-document.getElementById('checkout').onclick = function(){
+// WhatsApp Checkout Click Handler
+document.getElementById('checkout').onclick = () => {
   let ids = Object.keys(cart);
-  if(ids.length === 0){ alert('আপনার ব্যাগে কোনো প্রোডাক্ট নেই! আগে প্রোডাক্ট যোগ করুন।'); return; }
+  if(ids.length === 0){ alert('আপনার ব্যাগে কোনো প্রোডাক্ট নেই!'); return; }
   
   let name = document.getElementById('cName').value.trim();
   let phone = document.getElementById('cPhone').value.trim();
   let address = document.getElementById('cAddress').value.trim();
-  let note = document.getElementById('cNote').value.trim();
   let zoneSelect = document.getElementById('cZone');
   let zoneText = zoneSelect.options[zoneSelect.selectedIndex].text;
   let delivery = parseInt(zoneSelect.value);
 
   if(!name){ alert('দয়া করে আপনার নাম লিখুন।'); document.getElementById('cName').focus(); return; }
   if(!phone){ alert('দয়া করে আপনার মোবাইল নম্বর লিখুন।'); document.getElementById('cPhone').focus(); return; }
-  if(!address){ alert('দয়া করে ডেলিভারির সম্পূর্ণ ঠিকানা লিখুন।'); document.getElementById('cAddress').focus(); return; }
+  if(!address){ alert('দয়া করে আপনার সম্পূর্ণ ঠিকানা লিখুন।'); document.getElementById('cAddress').focus(); return; }
 
   let itemsList = '';
   let subTotal = 0;
@@ -310,24 +270,23 @@ document.getElementById('checkout').onclick = function(){
     let q = cart[i];
     let sub = x.price * q;
     subTotal += sub;
-    itemsList += `${idx + 1}. ${x.name} — ${q} টি × ৳${x.price} = ৳${sub}\n`;
+    itemsList += `${idx + 1}. ${x.name} — ${q} টি (৳${sub})\n`;
   });
 
   let grandTotal = subTotal + delivery;
 
   let message = `*নতুন অর্ডার — Mirazhé*\n` +
                 `━━━━━━━━━━━━━━━━━━━━\n` +
-                `*কাস্টমারের তথ্য:*\n` +
+                `*গ্রাহকের বিবরণ:*\n` +
                 `• নাম: ${name}\n` +
                 `• ফোন: ${phone}\n` +
                 `• এরিয়া: ${zoneText}\n` +
                 `• ঠিকানা: ${address}\n` +
-                (note ? `• নোট: ${note}\n` : '') +
                 `━━━━━━━━━━━━━━━━━━━━\n` +
-                `*অর্ডারকৃত প্রোডাক্ট:*\n` +
+                `*অর্ডারকৃত পণ্যসমূহ:*\n` +
                 `${itemsList}` +
                 `━━━━━━━━━━━━━━━━━━━━\n` +
-                `• প্রোডাক্ট মূল্য: ৳${subTotal}\n` +
+                `• সাব-টোটাল: ৳${subTotal}\n` +
                 `• ডেলিভারি চার্জ: ৳${delivery}\n` +
                 `*• সর্বমোট বিল: ৳${grandTotal}*`;
 

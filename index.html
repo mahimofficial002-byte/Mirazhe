@@ -289,10 +289,32 @@ renderGrid();renderCart();
         document.getElementById('product-list').innerHTML = html;
       }
     });
-if(document.getElementById('product-list')) {
-      document.getElementById('product-list').innerHTML = html;
-    }
-  });
-</script>
-</body>
-</html>
+<div id="product-list"></div>
+
+  <script>
+    const apiURL = 'https://script.google.com/macros/s/AKfycbypPSYH_rJ-uJXLvaCgEeyVSeRnhwSOvt8nVsZ_0XTuvlHYeBeHFNVnRXHrHczbN0cG/exec';
+
+    fetch(apiURL)
+      .then(response => response.json())
+      .then(products => {
+        let html = '';
+        products.forEach(item => {
+          html += `
+            <div class="product-card" style="border: 1px solid #ddd; padding: 15px; margin: 10px; display: inline-block; width: 220px;">
+              <img src="${item.image}" alt="${item.name}" style="width: 100%; height: 180px; object-fit: cover;">
+              <h3>${item.name}</h3>
+              <p>${item.description}</p>
+              <p><strong>দাম: ${item.price} টাকা</strong></p>
+              <a href="https://wa.me/8801577752625?text=আমি ${encodeURIComponent(item.name)} প্রোডাক্টটি অর্ডার করতে চাই" target="_blank" style="background: green; color: white; padding: 8px 12px; text-decoration: none; display: inline-block;">Order on WhatsApp</a>
+            </div>
+          `;
+        });
+        
+        if(document.getElementById('product-list')) {
+          document.getElementById('product-list').innerHTML = html;
+        }
+      });
+    </script>
+    <div id="product-list"></div>
+    </body>
+    </html>

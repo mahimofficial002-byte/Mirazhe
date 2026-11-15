@@ -128,7 +128,113 @@ footer .logo{color:var(--fg)}
 </div>
 
 <script>
-// এখানে প্রোডাক্টগুলোর তথ্য, দাম ও ছবির লিংক দেওয়া আছে। আপনি চাইলে ছবির লিংক পরিবর্তন করতে পারবেন।
+// ৩টি প্রোডাক্ট এবং আপনার দেওয়া ছবির লিংক এখানে সেট করা আছে
 const products = [
-  { id: 1, name: 'Lune Ring', description: 'Slim gold band, adjustable', price: 1450, image: 'https://https://i.postimg.cc/RZ0R1KVG/IMG-20250516-WA0043-500x500.webp' },
-  { id: 2, name: 'Pearl Drop Earrings', description: 'Freshwater-look pearl', price: 1890, image: 'https://i.ibb.co.com/1G6Z048/IMG-20250516-160533.jpg' },
+  { 
+    id: 1, 
+    name: 'Lune Ring', 
+    description: 'Slim gold band, adjustable', 
+    price: 1450, 
+    image: 'https://i.postimg.cc/RZ0R1KVG/IMG-20250516-WA0043-500x500.webp' 
+  },
+  { 
+    id: 2, 
+    name: 'Pearl Drop Earrings', 
+    description: 'Freshwater-look pearl', 
+    price: 1890, 
+    image: 'https://i.postimg.cc/RZ0R1KVG/IMG-20250516-WA0043-500x500.webp' 
+  },
+  { 
+    id: 3, 
+    name: 'Halo Necklace', 
+    description: 'Fine chain, 16 inch', 
+    price: 2350, 
+    image: 'https://i.postimg.cc/RZ0R1KVG/IMG-20250516-WA0043-500x500.webp' 
+  }
+];
+
+let cart = {};
+
+function renderProducts() {
+  let html = '';
+  products.forEach(item => {
+    html += `
+      <article class="card">
+        <div class="art">
+          <img src="${item.image}" alt="${item.name}">
+        </div>
+        <h3>${item.name}</h3>
+        <div class="meta">
+          <span>${item.description}</span>
+          <span class="price">৳${item.price}</span>
+        </div>
+        <button class="btn solid" data-add="${item.id}">Add to bag</button>
+      </article>
+    `;
+  });
+  document.getElementById('product-list').innerHTML = html;
+}
+
+function renderCart() {
+  let ids = Object.keys(cart), sum = 0, n = 0;
+  document.getElementById('items').innerHTML = ids.length ? ids.map(function(i){
+    let x = products.find(y => y.id == i), q = cart[i];
+    sum += x.price * q; n += q;
+    return `
+      <div class="line">
+        <div class="art"><img src="${x.image}" style="width:100%;height:100%;object-fit:cover"></div>
+        <div>
+          <h3 style="font-size:1rem">${x.name}</h3>
+          <div class="qty">
+            <button data-dec="${i}">−</button>
+            <span>${q}</span>
+            <button data-inc="${i}">+</button>
+          </div>
+        </div>
+        <span class="price">৳${x.price * q}</span>
+      </div>
+    `;
+  }).join('') : '<p class="empty">Your bag is empty.</p>';
+
+  document.getElementById('total').textContent = '৳' + sum;
+  document.getElementById('count').textContent = n;
+}
+
+document.addEventListener('click', function(e){
+  let t = e.target.closest('[data-add],[data-inc],[data-dec]');
+  if(t){
+    if(t.dataset.add){ let id = t.dataset.add; cart[id] = (cart[id] || 0) + 1; renderCart(); setCart(true); }
+    if(t.dataset.inc){ let id = t.dataset.inc; cart[id]++; renderCart(); }
+    if(t.dataset.dec){ let id = t.dataset.dec; cart[id]--; if(cart[id] < 1) delete cart[id]; renderCart(); }
+  }
+});
+
+function setCart(o){ document.getElementById('layer').hidden = !o; }
+document.getElementById('openCart').onclick = function(){ setCart(true); };
+document.getElementById('closeCart').onclick = document.getElementById('scrim').onclick = function(){ setCart(false); };
+
+// WhatsApp Checkout
+document.getElementById('checkout').onclick = function(){
+  let ids = Object.keys(cart);
+  if(ids.length === 0){ alert('আপনার ব্যাগে কোনো প্রোডাক্ট নেই!'); return; }
+  
+  let itemsList = '';
+  let totalSum = 0;
+  ids.forEach(i => {
+    let x = products.find(y => y.id == i);
+    let q = cart[i];
+    let sub = x.price * q;
+    totalSum += sub;
+    itemsList += `- ${x.name} (${q} টি) - ৳${sub}\n`;
+  });
+
+  let message = `আসসালামু আলাইকুম! আমি Mirazhé থেকে নিচের প্রোডাক্টগুলো অর্ডার করতে চাই:\n\n${itemsList}\nসর্বমোট বিল: ৳${totalSum}`;
+  let waUrl = `https://wa.me/8801577752625?text=${encodeURIComponent(message)}`;
+  window.open(waUrl, '_blank');
+};
+
+renderProducts();
+renderCart();
+</script>
+</body>
+</html>

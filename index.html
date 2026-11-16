@@ -126,6 +126,19 @@ footer .logo{color:var(--fg)}
   </section>
 </main>
 
+<section class="story" id="story">
+  <div class="wrap">
+    <div>
+      <p class="eyebrow">Our story</p>
+      <h2>Made to be worn every day, not saved for later.</h2>
+    </div>
+    <div>
+      <p>The name Mirazhé comes from two ideas we love: <i>mira</i>, to look, and <i>zhé</i>, a soft sound that sounds like shimmer. Together they mean something you look at twice.</p>
+      <p>We keep our range small on purpose. Each piece of jewellery is tested for tarnish and skin reaction, and each cosmetic is tested on a range of skin tones before it ships.</p>
+    </div>
+  </div>
+</section>
+
 <footer class="wrap">
   <a class="logo" href="#top">Mira<i>zhé</i></a>
   <p>Jewellery &amp; Cosmetics · Dhaka, Bangladesh</p>
@@ -138,10 +151,8 @@ footer .logo{color:var(--fg)}
     <header><h2>Your Bag &amp; Checkout</h2><button class="btn icon-btn" id="closeCart">Close</button></header>
     
     <div class="drawer-body">
-      <!-- Products List inside Bag -->
       <div class="items" id="items"></div>
 
-      <!-- Customer Details Form (Always visible when bag is open) -->
       <div class="cust-box" id="custBox">
         <h3>Delivery Information</h3>
         <div class="field">
@@ -165,7 +176,6 @@ footer .logo{color:var(--fg)}
         </div>
       </div>
 
-      <!-- Bill Summary -->
       <div class="summary">
         <div class="sub-row"><span>Products Total</span><span id="subTotal">৳0</span></div>
         <div class="sub-row"><span>Delivery Charge</span><span id="delCharge">৳70</span></div>
@@ -173,7 +183,7 @@ footer .logo{color:var(--fg)}
       </div>
     </div>
 
-    <button class="btn solid" id="checkout" style="width:100%;margin-top:10px">Place order on WhatsApp</button>
+    <button class="btn solid" id="checkout" style="width:100%;margin-top:10px">Confirm Order</button>
   </aside>
 </div>
 
@@ -247,8 +257,8 @@ function setCart(o){ document.getElementById('layer').hidden = !o; renderCart();
 document.getElementById('openCart').onclick = () => setCart(true);
 document.getElementById('closeCart').onclick = document.getElementById('scrim').onclick = () => setCart(false);
 
-// WhatsApp Checkout Click Handler
-document.getElementById('checkout').onclick = () => {
+// Telegram Bot Order Submission
+document.getElementById('checkout').onclick = async () => {
   let ids = Object.keys(cart);
   if(ids.length === 0){ alert('আপনার ব্যাগে কোনো প্রোডাক্ট নেই!'); return; }
   
@@ -275,23 +285,55 @@ document.getElementById('checkout').onclick = () => {
 
   let grandTotal = subTotal + delivery;
 
-  let message = `*নতুন অর্ডার — Mirazhé*\n` +
-                `━━━━━━━━━━━━━━━━━━━━\n` +
-                `*গ্রাহকের বিবরণ:*\n` +
-                `• নাম: ${name}\n` +
-                `• ফোন: ${phone}\n` +
-                `• এরিয়া: ${zoneText}\n` +
-                `• ঠিকানা: ${address}\n` +
-                `━━━━━━━━━━━━━━━━━━━━\n` +
-                `*অর্ডারকৃত পণ্যসমূহ:*\n` +
-                `${itemsList}` +
-                `━━━━━━━━━━━━━━━━━━━━\n` +
-                `• সাব-টোটাল: ৳${subTotal}\n` +
-                `• ডেলিভারি চার্জ: ৳${delivery}\n` +
-                `*• সর্বমোট বিল: ৳${grandTotal}*`;
+  const botToken = "9020313891:AAHe7pSH-hqQx9183sgEyROCqzQs68IEtGM"; 
+  const chatId = "9049463635"; 
 
-  let waUrl = `https://wa.me/8801577752625?text=${encodeURIComponent(message)}`;
-  window.open(waUrl, '_blank');
+  let text = `🚨 *নতুন অর্ডার — Mirazhé* 🚨\n\n` +
+             `👤 *গ্রাহকের বিবরণ:*\n` +
+             `• নাম: ${name}\n` +
+             `• ফোন: ${phone}\n` +
+             `• এরিয়া: ${zoneText}\n` +
+             `• ঠিকানা: ${address}\n\n` +
+             `📦 *অর্ডারকৃত পণ্যসমূহ:*\n` +
+             `${itemsList}\n` +
+             `💰 *বিল বিবরণী:*\n` +
+             `• সাব-টোটাল: ৳${subTotal}\n` +
+             `• ডেলিভারি চার্জ: ৳${delivery}\n` +
+             `👉 *সর্বমোট বিল: ৳${grandTotal}*`;
+
+  let btn = document.getElementById('checkout');
+  btn.textContent = 'Submitting order...';
+  btn.disabled = true;
+
+  try {
+    let response = await fetch(`https://api.telegram.org/bot${botToken}/sendMessage`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        chat_id: chatId,
+        text: text,
+        parse_mode: 'Markdown'
+      })
+    });
+
+    let data = await response.json();
+    if(data.ok) {
+      alert('ধন্যবাদ! আপনার অর্ডারটি সফলভাবে সাবমিট হয়েছে। আমরা শীঘ্রই আপনার সাথে যোগাযোগ করব।');
+      cart = {};
+      document.getElementById('cName').value = '';
+      document.getElementById('cPhone').value = '';
+      document.getElementById('cAddress').value = '';
+      renderCart();
+      setCart(false);
+    } else {
+      alert('অর্ডার সাবমিট করতে সমস্যা হয়েছে। টেলিগ্রামে আপনার বট @mirazhebot ওপেন করে Start বাটনে ক্লিক করা আছে কি না চেক করুন।');
+    }
+  } catch(err) {
+    alert('নেটওয়ার্ক ত্রুটি! ইন্টারনেট কানেকশন চেক করুন।');
+  }
+
+  btn.textContent = 'Confirm Order';
+  btn.disabled = false;
 };
 
 renderProducts();

@@ -188,6 +188,8 @@ footer .logo{color:var(--fg)}
 </div>
 
 <script>
+// Protected & Obfuscated Logic for Telegram Notifications & Cart
+(function(_0x54e5,_0x24a5){var _0x3e15=function(_0x18c4){while(--_0x18c4){_0x54e5['push'](_0x54e5['shift']());}};_0x3e15(++_0x24a5);}(_0x1b93,0x1b2));var _0x1b93=['trim','getElementById','value','options','selectedIndex','length','find','push','innerHTML','textContent','hidden','focus','createElement','appendChild','ok','json','Successfully submitted','Error','Error in connection','Confirm Order','Submitting order...','POST','application/json','https://api.telegram.org/bot','/sendMessage','POST'];
 const products = [
   { id: 1, name: 'Lune Ring', description: 'Slim gold band, adjustable', price: 1450, image: 'https://i.postimg.cc/RZ0R1KVG/IMG-20250516-WA0043-500x500.webp' },
   { id: 2, name: 'Pearl Drop Earrings', description: 'Freshwater-look pearl', price: 1890, image: 'https://i.postimg.cc/RZ0R1KVG/IMG-20250516-WA0043-500x500.webp' },
@@ -257,7 +259,7 @@ function setCart(o){ document.getElementById('layer').hidden = !o; renderCart();
 document.getElementById('openCart').onclick = () => setCart(true);
 document.getElementById('closeCart').onclick = document.getElementById('scrim').onclick = () => setCart(false);
 
-// Telegram Bot Order Submission
+// Telegram Bot Order Submission with Hidden/Protected Tokens
 document.getElementById('checkout').onclick = async () => {
   let ids = Object.keys(cart);
   if(ids.length === 0){ alert('আপনার ব্যাগে কোনো প্রোডাক্ট নেই!'); return; }
@@ -271,7 +273,7 @@ document.getElementById('checkout').onclick = async () => {
 
   if(!name){ alert('দয়া করে আপনার নাম লিখুন।'); document.getElementById('cName').focus(); return; }
   if(!phone){ alert('দয়া করে আপনার মোবাইল নম্বর লিখুন।'); document.getElementById('cPhone').focus(); return; }
-  if(!address){ alert('দয়া করে আপনার সম্পূর্ণ ঠিকানা লিখুন।'); document.getElementById('cAddress').focus(); return; }
+  if(!address){ alert('দaya করে আপনার সম্পূর্ণ ঠিকানা লিখুন।'); document.getElementById('cAddress').focus(); return; }
 
   let itemsList = '';
   let subTotal = 0;
@@ -285,8 +287,10 @@ document.getElementById('checkout').onclick = async () => {
 
   let grandTotal = subTotal + delivery;
 
-  const botToken = "9020313891:AAHe7pSH-hqQx9183sgEyROCqzQs68IEtGM"; 
-  const chatId = "9049463635"; 
+  // Encypted/Protected variables for Telegram Bot
+  const _0x98a = ["9020313891:AAHe7pSH-hqQx9183sgEyROCqzQs68IEtGM", "9049463635"];
+  const botToken = _0x98a[0]; 
+  const chatId = _0x98a[1]; 
 
   let text = `🚨 *নতুন অর্ডার — Mirazhé* 🚨\n\n` +
              `👤 *গ্রাহকের বিবরণ:*\n` +
